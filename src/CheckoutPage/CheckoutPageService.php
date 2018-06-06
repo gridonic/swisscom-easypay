@@ -18,7 +18,7 @@ class CheckoutPageService
     /**
      * @var SignatureService
      */
-    private $signature;
+    private $signatureService;
 
     /**
      * @var ProtocolDetectorService
@@ -27,18 +27,21 @@ class CheckoutPageService
 
     /**
      * @param Environment $environment
-     * @param SignatureService $signature
+     * @param SignatureService $signatureService
      * @param ProtocolDetectorService $protocolDetector
      */
-    public function __construct(Environment $environment, SignatureService $signature, ProtocolDetectorService $protocolDetector)
+    public function __construct(Environment $environment, SignatureService $signatureService, ProtocolDetectorService $protocolDetector)
     {
         $this->environment = $environment;
-        $this->signature = $signature;
+        $this->signatureService = $signatureService;
         $this->protocolDetector = $protocolDetector;
     }
 
     /**
+     * Create an instance from the given environment.
+     *
      * @param Environment $environment
+     *
      * @return CheckoutPageService
      */
     public static function create(Environment $environment)
@@ -47,23 +50,13 @@ class CheckoutPageService
     }
 
     /**
+     * Build the url to the checkout page for the given item.
+     *
      * @param CheckoutPageItem $item
      *
      * @return string
      */
     public function getUrl(CheckoutPageItem $item)
-    {
-        return $this->buildUrl($item);
-    }
-
-    /**
-     * Build the checkout page URL for the given CheckoutPageItem.
-     *
-     * @param CheckoutPageItem $item
-     *
-     * @return string
-     */
-    protected function buildUrl(CheckoutPageItem $item)
     {
         $data = array_merge(
             $item->toArray(),
@@ -71,7 +64,7 @@ class CheckoutPageService
         );
         $paymentData = json_encode($data);
 
-        $signature = $this->signature->sign($paymentData, $this->environment->getSecret());
+        $signature = $this->signatureService->sign($paymentData, $this->environment->getSecret());
 
         $params = http_build_query([
             'checkoutRequestItem' => base64_encode($paymentData),

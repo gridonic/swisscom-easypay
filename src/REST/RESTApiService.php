@@ -11,6 +11,8 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\ResponseInterface;
 
 /**
+ * Provides methods to query the Easypay REST API.
+ *
  * @package Gridonic\EasyPay\Request
  */
 class RESTApiService
@@ -48,6 +50,7 @@ class RESTApiService
 
     /**
      * @param Environment $environment
+     *
      * @return RESTApiService
      */
     public static function create(Environment $environment)
@@ -56,10 +59,14 @@ class RESTApiService
     }
 
     /**
-     * @param string $paymentId
-     * @param string $operation
+     * Execute a direct payment for one-time-purchases over the checkout page.
      *
-     * @throws RESTApiException
+     * This method can be used to COMMIT, REJECT or REFUND a given payment.
+     *
+     * @param string $paymentId The payment ID obtained after the purchase on the checkout page.
+     * @param string $operation COMMIT, REJECT or REFUND. Defaults to COMMIT.
+     *
+     * @throws RESTApiException Thrown if the API is not reachable due to network problems.
      *
      * @return DirectPaymentResponse
      */
@@ -91,8 +98,8 @@ class RESTApiService
                 return $response
                     ->setIsSuccess(true)
                     ->setHttpStatusCode(200)
-                    ->setAmount($body['amount'] ?? '')
-                    ->setOperation($body['operation'] ?? '');
+                    ->setAmount($body['amount'] ?? null)
+                    ->setOperation($body['operation'] ?? null);
             } else {
                 return $this->buildErrorResponseFromHttpResponse($response, $httpResponse);
             }
@@ -102,20 +109,18 @@ class RESTApiService
     }
 
     /**
-     * @param string $paymentId
-     * @return AuthSubscriptionResponse|DirectPaymentResponse
-     * @throws RESTApiException
+     * Get all information about a direct payment.
+     *
+     * @param string $paymentId The payment ID obtained after the purchase on the checkout page.
+     *
+     * @throws RESTApiException Thrown if the API is not reachable due to network problems.
+     *
+     * @return DirectPaymentResponse
      */
     public function getDirectPayment(string $paymentId)
     {
         $uri = sprintf('payments/%s', $paymentId);
-        $headers = array_merge(
-            $this->getDefaultHeaders(),
-            [
-                'Content-Type' => self::HEADER_DIRECT_PAYMENT,
-                'Accept' => self::HEADER_MESSAGE_LIST,
-            ]
-        );
+        $headers = array_merge($this->getDefaultHeaders(), ['Accept' => self::HEADER_DIRECT_PAYMENT]);
 
         $request = $this->requestSignerService->sign(new Request('GET', $uri, $headers));
 
@@ -129,13 +134,16 @@ class RESTApiService
                 return $response
                     ->setIsSuccess(true)
                     ->setHttpStatusCode($httpResponse->getStatusCode())
-                    ->setAmount($body['amount'] ?? '')
-                    ->setOrderId($body['orderId'] ?? '')
-                    ->setIsAdultContent(isset($body['isAdultContent']) && $body['isAdultContent'] ? true : false)
-                    ->setIsRoaming(isset($body['isRoaming']) && $body['isRoaming'] ? true : false)
-                    ->setPaymentInfo($body['paymentInfo'] ?? '')
-                    ->setUserSourceIp($body['userSourceIP'] ?? '')
-                    ->setUserAgentOrigin($body['userAgentOrigin'] ?? '');
+                    ->setAmount($body['amount'] ?? null)
+                    ->setOrderId($body['orderID'] ?? null)
+                    ->setStatus($body['status'] ?? null)
+                    ->setCreatedOn($body['createdOn'] ?? null)
+                    ->setExtTransactionId($body['extTransactionId'] ?? null)
+                    ->setIsAdultContent(isset($body['isAdultContent']) ? (bool) $body['isAdultContent'] : null)
+                    ->setIsRoaming(isset($body['isRoaming']) ? (bool) $body['isRoaming'] : null)
+                    ->setPaymentInfo($body['paymentInfo'] ?? null)
+                    ->setUserSourceIp($body['userSourceIP'] ?? null)
+                    ->setUserAgentOrigin($body['userAgentOrigin'] ?? null);
             } else {
                 return $this->buildErrorResponseFromHttpResponse($response, $httpResponse);
             }
@@ -145,11 +153,15 @@ class RESTApiService
     }
 
     /**
-     * @param string $authSubscriptionId
-     * @param string $operation
-     * @param array $additionalData
+     * Authorize a subscription payment.
      *
-     * @throws RESTApiException
+     * This method can be used to COMMIT, REJECT, REFUND, RENEW or CANCEL a given subscription payment.
+     *
+     * @param string $authSubscriptionId The subscription ID obtained after the purchase on the checkout page.
+     * @param string $operation COMMIT, REJECT, REFUND, RENEW or CANCEL.
+     * @param array $additionalData Some operations may need additional data to be submitted in the request body.
+     *
+     * @throws RESTApiException Thrown if the API is not reachable due to network problems.
      *
      * @return AuthSubscriptionResponse
      */
@@ -181,9 +193,9 @@ class RESTApiService
                 return $response
                     ->setIsSuccess(true)
                     ->setHttpStatusCode($httpResponse->getStatusCode())
-                    ->setAmount($body['amount'] ?? '')
-                    ->setOperation($body['operation'] ?? '')
-                    ->setStartRefund($body['startRefund'] ?? '');
+                    ->setAmount($body['amount'] ?? null)
+                    ->setOperation($body['operation'] ?? null)
+                    ->setStartRefund($body['startRefund'] ?? null);
             } else {
                 return $this->buildErrorResponseFromHttpResponse($response, $httpResponse);
             }
@@ -192,8 +204,67 @@ class RESTApiService
         }
     }
 
+    /**
+     * Get all information about an authorized subscription.
+     *
+     * @param string $authSubscriptionId The subscription ID obtained after the purchase on the checkout page.
+     *
+     * @throws RESTApiException Thrown if the API is not reachable due to network problems.
+     *
+     * @return AuthSubscriptionResponse
+     */
     public function getAuthorizeSubscription(string $authSubscriptionId)
     {
+        $uri = sprintf('authsubscriptions/%s', $authSubscriptionId);
+        $headers = array_merge($this->getDefaultHeaders(), ['Accept' => self::HEADER_AUTH_SUBSCRIPTION]);
+
+        $request = $this->requestSignerService->sign(new Request('GET', $uri, $headers));
+
+        try {
+            $httpResponse = $this->httpClient->send($request, $this->getDefaultRequestOptions());
+            $response = new AuthSubscriptionResponse();
+
+            if ($httpResponse->getStatusCode() === 200) {
+                $body = json_decode((string) $httpResponse->getBody(), true);
+
+                return $response
+                    ->setIsSuccess(true)
+                    ->setHttpStatusCode($httpResponse->getStatusCode())
+                    ->setAmount($body['amount'] ?? null)
+                    ->setOrderId($body['orderID'] ?? null)
+                    ->setStatus($body['status'] ?? null)
+                    ->setExtTransactionId($body['extTransactionId'] ?? null)
+                    ->setIsAdultContent(isset($body['isAdultContent']) ? (bool) $body['isAdultContent'] : null)
+                    ->setIsRoaming(isset($body['isRoaming']) ? (bool) $body['isRoaming'] : null)
+                    ->setIsActive(isset($body['isActive']) ? (bool) $body['isActive'] : null)
+                    ->setDurationUnit($body['durationUnit'] ?? null)
+                    ->setDuration($body['duration'] ?? null)
+                    ->setMsidn($body['msisdn'] ?? null)
+                    ->setCreatedOn($body['createdOn'] ?? null)
+                    ->setUri($body['URI'] ?? null)
+                    ->setNextPayment($body['nextPayment'] ?? null)
+                    ->setStartRefund($body['startRefund'] ?? null)
+                    ->setCpServiceId($body['cpServiceId'] ?? null)
+                    ->setCpUserId($body['cpUserId'] ?? null)
+                    ->setCpSubscriptionId($body['cpSubscriptionId'] ?? null);
+            } else {
+                return $this->buildErrorResponseFromHttpResponse($response, $httpResponse);
+            }
+        } catch (GuzzleException $e) {
+            throw new RESTApiException($e->getMessage(), 0, $e);
+        }
+    }
+
+    /**
+     * Get the status of a previous sent request.
+     *
+     * @param string $requestId
+     *
+     * @throws \Exception
+     */
+    public function getRequestStatus($requestId)
+    {
+        throw new \Exception("Not yet implemented");
     }
 
     /**
@@ -210,10 +281,10 @@ class RESTApiService
         $errorMessages = array_map(function ($message) {
             $errorMessage = new ErrorMessage();
             return $errorMessage
-                ->setCode($message['code'] ?? '')
-                ->setField($message['field'] ?? '')
-                ->setMessage($message['message'] ?? '')
-                ->setRequestId($message['requestId'] ?? '');
+                ->setCode($message['code'] ?? null)
+                ->setField($message['field'] ?? null)
+                ->setMessage($message['message'] ?? null)
+                ->setRequestId($message['requestId'] ?? null);
         }, $messages);
 
         return $response

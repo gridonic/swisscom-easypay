@@ -3,13 +3,18 @@
 namespace Gridonic\EasyPay\Signature;
 
 /**
+ * Service to sign and hash data for the signature calculation.
+ *
  * @package Gridonic\EasyPay\Signature
  */
 class SignatureService
 {
     /**
+     * Sign the given data with the given secret key.
+     *
      * @param string $data
      * @param string $secret
+     *
      * @return string
      */
     public function sign(string $data, string $secret)
@@ -19,6 +24,7 @@ class SignatureService
 
     /**
      * @param string $data
+     *
      * @return string
      */
     public function hash(string $data)

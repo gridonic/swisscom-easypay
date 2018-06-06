@@ -3,6 +3,8 @@
 namespace Gridonic\EasyPay\CheckoutPage;
 
 /**
+ * Represents the item to purchase on the Easypay checkout page.
+ *
  * @package Gridonic\EasyPay\CheckoutPage
  */
 class CheckoutPageItem
@@ -448,10 +450,6 @@ class CheckoutPageItem
      */
     public function setUserLanguage(string $userLanguage)
     {
-        if (!in_array($userLanguage, ['de', 'fr', 'it', 'en'])) {
-            throw new \InvalidArgumentException('User language must be one of "de", "fr", "it" or "en"');
-        }
-
         $this->userLanguage = $userLanguage;
 
         return $this;

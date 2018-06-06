@@ -3,6 +3,8 @@
 namespace Gridonic\EasyPay\REST;
 
 /**
+ * Base class for all responses from the REST Api.
+ *
  * @package Gridonic\EasyPay\REST
  */
 abstract class RESTApiResponse implements RESTApiResponseInterface
@@ -21,6 +23,21 @@ abstract class RESTApiResponse implements RESTApiResponseInterface
      * @var string
      */
     private $orderId;
+
+    /**
+     * @var string
+     */
+    private $status;
+
+    /**
+     * @var string
+     */
+    private $extTransactionId;
+
+    /**
+     * @var string
+     */
+    private $createdOn;
 
     /**
      * @var string
@@ -58,7 +75,7 @@ abstract class RESTApiResponse implements RESTApiResponseInterface
     /**
      * @inheritdoc
      */
-    public function setIsSuccess(bool $success)
+    public function setIsSuccess($success)
     {
         $this->isSuccess = $success;
 
@@ -76,7 +93,7 @@ abstract class RESTApiResponse implements RESTApiResponseInterface
     /**
      * @inheritdoc
      */
-    public function setHttpStatusCode(int $httpStatusCode)
+    public function setHttpStatusCode($httpStatusCode)
     {
         $this->httpStatusCode = $httpStatusCode;
 
@@ -112,7 +129,7 @@ abstract class RESTApiResponse implements RESTApiResponseInterface
     /**
      * @inheritdoc
      */
-    public function setOperation(string $operation)
+    public function setOperation($operation)
     {
         $this->operation = $operation;
 
@@ -130,7 +147,7 @@ abstract class RESTApiResponse implements RESTApiResponseInterface
     /**
      * @inheritdoc
      */
-    public function setAmount(string $amount)
+    public function setAmount($amount)
     {
         $this->amount = $amount;
 
@@ -148,7 +165,7 @@ abstract class RESTApiResponse implements RESTApiResponseInterface
     /**
      * @inheritdoc
      */
-    public function setIsRoaming(bool $isRoaming)
+    public function setIsRoaming($isRoaming)
     {
         $this->isRoaming = $isRoaming;
 
@@ -166,7 +183,7 @@ abstract class RESTApiResponse implements RESTApiResponseInterface
     /**
      * @inheritdoc
      */
-    public function setIsAdultContent(bool $isAdultContent)
+    public function setIsAdultContent($isAdultContent)
     {
         $this->isAdultContent = $isAdultContent;
 
@@ -184,10 +201,80 @@ abstract class RESTApiResponse implements RESTApiResponseInterface
     /**
      * @inheritdoc
      */
-    public function setOrderId(string $orderId)
+    public function setOrderId($orderId)
     {
         $this->orderId = $orderId;
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCreatedOn()
+    {
+        return $this->createdOn;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCreatedOn($createdOn)
+    {
+        $this->createdOn = $createdOn;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtTransactionId()
+    {
+        return $this->extTransactionId;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtTransactionId($extTransactionId)
+    {
+        $this->extTransactionId = $extTransactionId;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function toArray()
+    {
+        $array = [];
+        foreach ($this as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+            $array[$key] = $value;
+        }
+
+        return $array;
     }
 }

@@ -7,6 +7,8 @@ use Gridonic\EasyPay\Signature\SignatureService;
 use GuzzleHttp\Psr7\Request;
 
 /**
+ * Service class to sign a request for the EasyPay REST Api.
+ *
  * @package Gridonic\EasyPay\REST
  */
 class RequestSignerService
@@ -19,16 +21,16 @@ class RequestSignerService
     /**
      * @var SignatureService
      */
-    private $signature;
+    private $signatureService;
 
     /**
      * @param Environment $environment
-     * @param SignatureService $signature
+     * @param SignatureService $signatureService
      */
-    public function __construct(Environment $environment, SignatureService $signature)
+    public function __construct(Environment $environment, SignatureService $signatureService)
     {
         $this->environment = $environment;
-        $this->signature = $signature;
+        $this->signatureService = $signatureService;
     }
 
     /**
@@ -44,11 +46,12 @@ class RequestSignerService
     {
         $contentTypeHeader = $request->getHeader('Content-Type');
         $contentType = count($contentTypeHeader) ? array_pop($contentTypeHeader) : '';
-        $contentHash = base64_encode($this->signature->hash((string) $request->getBody()));
+        $body = (string) $request->getBody();
+        $contentHash = ($body) ? base64_encode($this->signatureService->hash($body)) : '';
         $date = $this->date();
 
         $hash = $this->buildHash($request->getMethod(), $contentHash, $contentType, $date, $request->getUri());
-        $signature = base64_encode($this->signature->sign($hash, $this->environment->getSecret()));
+        $signature = base64_encode($this->signatureService->sign($hash, $this->environment->getSecret()));
 
         return $request
             ->withAddedHeader('X-SCS-Signature', $signature)

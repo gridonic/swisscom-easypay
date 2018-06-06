@@ -35,7 +35,7 @@ class Environment
     public function __construct(string $environmentType, string $merchantId, string $secret)
     {
         if (!in_array($environmentType, [self::ENV_PROD, self::ENV_STAGING])) {
-            throw new \InvalidArgumentException('Environment type must be either "PROD" or "STAGING"');
+            throw new \InvalidArgumentException('Environment type must be either "prod" or "staging"');
         }
 
         $this->environmentType = $environmentType;

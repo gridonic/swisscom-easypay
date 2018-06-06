@@ -34,7 +34,7 @@ class DirectPaymentResponse extends RESTApiResponse
      * @param string $paymentInfo
      * @return DirectPaymentResponse
      */
-    public function setPaymentInfo(string $paymentInfo)
+    public function setPaymentInfo($paymentInfo)
     {
         $this->paymentInfo = $paymentInfo;
 
@@ -53,7 +53,7 @@ class DirectPaymentResponse extends RESTApiResponse
      * @param string $userAgentOrigin
      * @return DirectPaymentResponse
      */
-    public function setUserAgentOrigin(string $userAgentOrigin)
+    public function setUserAgentOrigin($userAgentOrigin)
     {
         $this->userAgentOrigin = $userAgentOrigin;
 
@@ -72,7 +72,7 @@ class DirectPaymentResponse extends RESTApiResponse
      * @param string $userSourceIp
      * @return DirectPaymentResponse
      */
-    public function setUserSourceIp(string $userSourceIp)
+    public function setUserSourceIp($userSourceIp)
     {
         $this->userSourceIp = $userSourceIp;
 

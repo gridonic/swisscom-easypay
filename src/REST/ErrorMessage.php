@@ -37,9 +37,10 @@ class ErrorMessage
 
     /**
      * @param string $message
+     *
      * @return ErrorMessage
      */
-    public function setMessage(string $message)
+    public function setMessage($message)
     {
         $this->message = $message;
 
@@ -56,9 +57,10 @@ class ErrorMessage
 
     /**
      * @param string $field
+     *
      * @return ErrorMessage
      */
-    public function setField(string $field)
+    public function setField($field)
     {
         $this->field = $field;
 
@@ -75,9 +77,10 @@ class ErrorMessage
 
     /**
      * @param string $code
+     *
      * @return ErrorMessage
      */
-    public function setCode(string $code)
+    public function setCode($code)
     {
         $this->code = $code;
 
@@ -94,9 +97,10 @@ class ErrorMessage
 
     /**
      * @param string $requestId
+     *
      * @return ErrorMessage
      */
-    public function setRequestId(string $requestId)
+    public function setRequestId($requestId)
     {
         $this->requestId = $requestId;
 

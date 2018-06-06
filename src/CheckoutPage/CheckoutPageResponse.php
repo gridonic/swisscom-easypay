@@ -21,6 +21,8 @@ class CheckoutPageResponse
     }
 
     /**
+     * Create an instance from the $_GET parameters.
+     *
      * @return CheckoutPageResponse
      */
     public static function createFromGet()

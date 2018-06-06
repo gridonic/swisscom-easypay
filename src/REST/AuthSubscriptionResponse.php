@@ -30,11 +30,6 @@ class AuthSubscriptionResponse extends RESTApiResponse
     /**
      * @var string
      */
-    private $createdOn;
-
-    /**
-     * @var string
-     */
     private $uri;
 
     /**
@@ -79,7 +74,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param bool $isActive
      * @return AuthSubscriptionResponse
      */
-    public function setIsActive(bool $isActive)
+    public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
 
@@ -98,7 +93,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param string $msidn
      * @return AuthSubscriptionResponse
      */
-    public function setMsidn(string $msidn)
+    public function setMsidn($msidn)
     {
         $this->msidn = $msidn;
 
@@ -117,7 +112,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param int $duration
      * @return AuthSubscriptionResponse
      */
-    public function setDuration(int $duration)
+    public function setDuration($duration)
     {
         $this->duration = $duration;
 
@@ -136,28 +131,9 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param string $durationUnit
      * @return AuthSubscriptionResponse
      */
-    public function setDurationUnit(string $durationUnit)
+    public function setDurationUnit($durationUnit)
     {
         $this->durationUnit = $durationUnit;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCreatedOn()
-    {
-        return $this->createdOn;
-    }
-
-    /**
-     * @param string $createdOn
-     * @return AuthSubscriptionResponse
-     */
-    public function setCreatedOn(string $createdOn)
-    {
-        $this->createdOn = $createdOn;
 
         return $this;
     }
@@ -174,7 +150,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param string $uri
      * @return AuthSubscriptionResponse
      */
-    public function setUri(string $uri)
+    public function setUri($uri)
     {
         $this->uri = $uri;
 
@@ -193,7 +169,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param string $nextPayment
      * @return AuthSubscriptionResponse
      */
-    public function setNextPayment(string $nextPayment)
+    public function setNextPayment($nextPayment)
     {
         $this->nextPayment = $nextPayment;
 
@@ -212,7 +188,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param string $startRefund
      * @return AuthSubscriptionResponse
      */
-    public function setStartRefund(string $startRefund)
+    public function setStartRefund($startRefund)
     {
         $this->startRefund = $startRefund;
 
@@ -231,7 +207,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param string $merchantId
      * @return AuthSubscriptionResponse
      */
-    public function setMerchantId(string $merchantId)
+    public function setMerchantId($merchantId)
     {
         $this->merchantId = $merchantId;
 
@@ -241,7 +217,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
     /**
      * @return string
      */
-    public function getCpServiceId(): string
+    public function getCpServiceId()
     {
         return $this->cpServiceId;
     }
@@ -250,7 +226,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param string $cpServiceId
      * @return AuthSubscriptionResponse
      */
-    public function setCpServiceId(string $cpServiceId)
+    public function setCpServiceId($cpServiceId)
     {
         $this->cpServiceId = $cpServiceId;
 
@@ -269,7 +245,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param string $cpUserId
      * @return AuthSubscriptionResponse
      */
-    public function setCpUserId(string $cpUserId)
+    public function setCpUserId($cpUserId)
     {
         $this->cpUserId = $cpUserId;
 
@@ -288,7 +264,7 @@ class AuthSubscriptionResponse extends RESTApiResponse
      * @param string $cpSubscriptionId
      * @return AuthSubscriptionResponse
      */
-    public function setCpSubscriptionId(string $cpSubscriptionId)
+    public function setCpSubscriptionId($cpSubscriptionId)
     {
         $this->cpSubscriptionId = $cpSubscriptionId;
 

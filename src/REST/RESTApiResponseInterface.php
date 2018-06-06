@@ -3,6 +3,8 @@
 namespace Gridonic\EasyPay\REST;
 
 /**
+ * Contract for all responses from the REST Api.
+ *
  * @package Gridonic\EasyPay\REST
  */
 interface RESTApiResponseInterface
@@ -21,7 +23,7 @@ interface RESTApiResponseInterface
      * @param int $httpStatusCode
      * @return $this
      */
-    public function setHttpStatusCode(int $httpStatusCode);
+    public function setHttpStatusCode($httpStatusCode);
 
     /**
      * @return array
@@ -38,7 +40,7 @@ interface RESTApiResponseInterface
      * @param bool $success
      * @return $this
      */
-    public function setIsSuccess(bool $success);
+    public function setIsSuccess($success);
 
     /**
      * @return string
@@ -49,7 +51,7 @@ interface RESTApiResponseInterface
      * @param string $operation
      * @return $this
      */
-    public function setOperation(string $operation);
+    public function setOperation($operation);
 
     /**
      * @return string
@@ -60,7 +62,7 @@ interface RESTApiResponseInterface
      * @param string $amount
      * @return $this
      */
-    public function setAmount(string $amount);
+    public function setAmount($amount);
 
     /**
      * @return string
@@ -71,7 +73,7 @@ interface RESTApiResponseInterface
      * @param string $id
      * @return $this
      */
-    public function setOrderId(string $id);
+    public function setOrderId($id);
 
     /**
      * @return bool
@@ -82,7 +84,7 @@ interface RESTApiResponseInterface
      * @param bool $isRoaming
      * @return $this
      */
-    public function setIsRoaming(bool $isRoaming);
+    public function setIsRoaming($isRoaming);
 
     /**
      * @return bool
@@ -93,5 +95,45 @@ interface RESTApiResponseInterface
      * @param bool $adultContent
      * @return $this
      */
-    public function setIsAdultContent(bool $adultContent);
+    public function setIsAdultContent($adultContent);
+
+    /**
+     * @return string
+     */
+    public function getCreatedOn();
+
+    /**
+     * @param string $createdOn
+     * @return $this
+     */
+    public function setCreatedOn($createdOn);
+
+    /**
+     * @return string
+     */
+    public function getStatus();
+
+    /**
+     * @param string $status
+     * @return $this
+     */
+    public function setStatus($status);
+
+    /**
+     * @return string
+     */
+    public function getExtTransactionId();
+
+    /**
+     * @param string $extTransactionId
+     * @return $this
+     */
+    public function setExtTransactionId($extTransactionId);
+
+    /**
+     * Returns an array with all properties except the ones being null.
+     *
+     * @return array
+     */
+    public function toArray();
 }

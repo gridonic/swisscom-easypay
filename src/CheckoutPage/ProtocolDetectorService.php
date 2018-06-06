@@ -3,6 +3,8 @@
 namespace Gridonic\EasyPay\CheckoutPage;
 
 /**
+ * A service to detect the correct HTTP protocol (http or https) based on the client's IP.
+ *
  * @package Gridonic\EasyPay\CheckoutPage
  */
 class ProtocolDetectorService
@@ -21,7 +23,7 @@ class ProtocolDetectorService
      *
      * @param string $ip
      *
-     * @return string 'http' or 'https'
+     * @return string
      */
     public function detect($ip)
     {
@@ -51,8 +53,13 @@ class ProtocolDetectorService
     }
 
     /**
-     * @param string $ip
-     * @param string $range
+     * Check if the given IP is in the given IP/CIDR range.
+     *
+     * @see https://gist.github.com/tott/7684443
+     *
+     * @param string $ip IP in the IPV4 format, e.g. 127.0.0.1
+     * @param string $range IP/CIDR netmask e.g. 127.0.0.0/24
+     *
      * @return bool
      */
     protected function isIpInRange(string $ip, string $range)
