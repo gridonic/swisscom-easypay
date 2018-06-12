@@ -2,6 +2,8 @@
     "name": "gridonic/swisscom-easypay",
     "description": "PHP library to handle payments with Swisscom EasyPay",
     "type": "library",
+    "keywords": ["swisscom easypay", "library", "payment gateway"],
+    "homepage": "https://github.com/gridonic/swisscom-easypay",
     "license": "MIT",
     "require": {
         "php": ">=7.0",

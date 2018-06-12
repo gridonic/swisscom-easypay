@@ -1,10 +1,14 @@
 # Swisscom Easypay
 
-A simple to use PHP library to manage payments with Swisscom Easypay.
+A PHP library to manage payments with Swisscom Easypay.
 
 ## Installation
 
-TODO
+Install the library with composer: 
+
+```
+composer require gridonic/swisscom-easypay
+```
 
 ## Basic Usage
 
@@ -18,7 +22,8 @@ Create a new `STAGING` or `PROD` environment based on your credentials:
 ```php
 use Gridonic\EasyPay\Environment\Environment;
 
-$environment = new Environment(Environment::ENV_STAGING, 'my-merchant-id', 'my-secret-key')
+$prodEnvironment = new Environment(Environment::ENV_PROD, 'my-merchant-id', 'my-secret-key')
+$stagingEnvironment = new Environment(Environment::ENV_STAGING, 'my-merchant-id', 'my-secret-key')
 ```
 
 ### Checkout page
@@ -29,7 +34,7 @@ Redirect the user to the Easypay checkout page where the purchase must be confir
 _success/error/cancel_ urls for the redirect back to your shop.
 2. In case of a recurrent service, make sure to pass the duration and duration unit to
  the checkout page item via `setDuration()` and `setDurationUnit()`. 
-3. Use the `CheckoutPageService` to obtain the redirect url.
+3. Call `CheckoutPageService::getCheckoutPageUrl()` to obtain the redirect url.
 
 ```php
 use Gridonic\EasyPay\CheckoutPage\CheckoutPageItem;
@@ -40,7 +45,7 @@ $checkoutPageItem = new CheckoutPageItem();
 $checkoutPageItem
     ->setTitle('A title displayed on the checkout page')
     ->setDescription('A description displayed on the checkout page')
-    ->setPaymentInfo('Some payment information, visible on the invoice')
+    ->setPaymentInfo('Some payment information, visible on the invoice of the customer')
     ->setAmount('99.90')
     ->setSuccessUrl('https://myshop.com/return')
     ->setErrorUrl('https://myshop.com/return')
@@ -48,14 +53,14 @@ $checkoutPageItem
 
 // Get the checkout page redirect URL
 $checkoutPageService = CheckoutPageService::create($environment);
-$redirectUrl = $checkoutPageService->getUrl($checkoutPageItem);
+$redirectUrl = $checkoutPageService->getCheckoutPageUrl($checkoutPageItem);
 ```
 ### Handling the checkout page response
 
-After confirming the purchase on the checkout page, the user is redirected back to your shop.
+After confirming the purchase on the checkout page, the user is redirected back to the shop.
 In order to complete the purchase, the payment must be committed via Easypay's REST API. Use
-the `CheckoutPageResponseService` to check for errors and get the `payment-ID` or `subscription-ID`
-required to commit the payment:
+the `CheckoutPageResponseService` to get the `payment-ID` or `subscription-ID` required to 
+commit the payment:
 
 ```php
 use Gridonic\EasyPay\CheckoutPage\CheckoutPageResponse
@@ -66,7 +71,7 @@ $checkoutPageResponse = CheckoutPageResponse::createFromGet();
 if ($checkoutPageResponse->isSuccess()) {
     $paymentId = $checkoutPageResponse->getPaymentId();
     
-    // or if the submitted CheckoutPageItem is of type recurrent
+    // or if the submitted CheckoutPageItem is a subscription (recurrent service)
     $authSubscriptionId = $checkoutPageResponse->getAuthSubscriptionId();
 } else {
     print_r($checkoutPageResponse->getErrorCode())
@@ -116,7 +121,7 @@ if ($authSubscriptionResponse->isSuccess()) {
 
 ## Easypay REST API
 
-The `RestApiService` class offers some of useful methods to manage payments:
+The `RestApiService` class offers an abstraction of Easypay's REST API to manage payments.
 
 ---
 
@@ -144,8 +149,12 @@ Commit/Reject/Refund/Renew or Cancel an authorized subscription.
 
 Get all information about an authorized subscription.
 
+---
+
 ## Run tests
 
-TODO
+Make sure that the `dev-dependencies` are installed, then execute phpunit from the `vendor` directory:
 
-
+```
+vendor/bin/phpunit tests
+```
