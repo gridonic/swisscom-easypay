@@ -50,12 +50,12 @@ class CheckoutPageItem
     /**
      * @var bool
      */
-    private $isAdultContent = false;
+    private $isAdultContent;
 
     /**
      * @var bool
      */
-    private $isRoaming = false;
+    private $isRoaming;
 
     /**
      * @var string
@@ -111,6 +111,14 @@ class CheckoutPageItem
      * @var string
      */
     private $storeSource;
+
+    /**
+     * @param array $data
+     */
+    public function __construct(array $data = [])
+    {
+        $this->setData($data);
+    }
 
     /**
      * @return array
@@ -510,5 +518,24 @@ class CheckoutPageItem
         $this->storeSource = $storeSource;
 
         return $this;
+    }
+
+    /**
+     * Set properties from the given data via setter.
+     *
+     * @param array $data
+     */
+    protected function setData(array $data)
+    {
+        if (!count($data)) {
+            return;
+        }
+
+        foreach ($data as $key => $value) {
+            $setter = sprintf('set%s', ucfirst($key));
+            if (method_exists($this, $setter)) {
+                $this->$setter($value);
+            }
+        }
     }
 }
