@@ -14,24 +14,24 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckoutPageServiceTest extends TestCase
 {
-    public function testGetUrl_UrlDifferentDependingOnEnvironment_UrlContainsCorrectHost()
+    public function testGetCheckoutPageUrl_UrlDifferentDependingOnEnvironment_UrlContainsCorrectHost()
     {
         $environment = new Environment(Environment::ENV_PROD, 'gridonic-123', 's3cr3t');
         $checkoutPageService = CheckoutPageService::create($environment);
 
-        $url = $checkoutPageService->getUrl(new CheckoutPageItem());
+        $url = $checkoutPageService->getCheckoutPageUrl(new CheckoutPageItem());
         $this->assertNotFalse(strpos($url, 'easypay.swisscom.ch'));
         $this->assertFalse(strpos($url, 'easypay-staging.swisscom.ch'));
 
         $environment = new Environment(Environment::ENV_STAGING, 'gridonic-123', 's3cr3t');
         $checkoutPageService = CheckoutPageService::create($environment);
 
-        $url = $checkoutPageService->getUrl(new CheckoutPageItem());
+        $url = $checkoutPageService->getCheckoutPageUrl(new CheckoutPageItem());
         $this->assertFalse(strpos($url, 'easypay.swisscom.ch'));
         $this->assertNotFalse(strpos($url, 'easypay-staging.swisscom.ch'));
     }
 
-    public function testGetUrl_BasedOnEnvironmentAndCheckoutItem_UrlCorrect()
+    public function testGetCheckoutPageUrl_BasedOnEnvironmentAndCheckoutItem_UrlCorrect()
     {
         $checkoutPageService = $this->getCheckoutPageService(function($environmentMock, $signatureServiceMock, $protocolDetectorServiceMock) {
             $environmentMock
@@ -75,7 +75,7 @@ class CheckoutPageServiceTest extends TestCase
         ]);
 
         $expectedUrl = sprintf('http://easypay.swisscom.ch/charging-engine-checkout/authorize.jsf?%s', $urlParams);
-        $this->assertEquals($expectedUrl, $checkoutPageService->getUrl($checkoutItem));
+        $this->assertEquals($expectedUrl, $checkoutPageService->getCheckoutPageUrl($checkoutItem));
     }
 
 

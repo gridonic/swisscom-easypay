@@ -56,7 +56,7 @@ class CheckoutPageService
      *
      * @return string
      */
-    public function getUrl(CheckoutPageItem $item)
+    public function getCheckoutPageUrl(CheckoutPageItem $item)
     {
         $data = array_merge(
             $item->toArray(),

@@ -256,18 +256,6 @@ class RESTApiService
     }
 
     /**
-     * Get the status of a previous sent request.
-     *
-     * @param string $requestId
-     *
-     * @throws \Exception
-     */
-    public function getRequestStatus($requestId)
-    {
-        throw new \Exception("Not yet implemented");
-    }
-
-    /**
      * @param RESTApiResponseInterface $response
      * @param ResponseInterface $httpResponse
      *
