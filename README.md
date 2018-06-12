@@ -2,6 +2,9 @@
 
 A PHP library to manage payments with Swisscom Easypay.
 
+[![Build Status](https://travis-ci.org/gridonic/swisscom-easypay.svg?branch=master)](https://travis-ci.org/gridonic/swisscom-easypay)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Installation
 
 Install the library with composer: 
