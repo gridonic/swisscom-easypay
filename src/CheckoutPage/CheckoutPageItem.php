@@ -127,9 +127,6 @@ class CheckoutPageItem
     {
         $array = [];
         foreach ($this as $key => $value) {
-            if ($value === null) {
-                continue;
-            }
             $array[$key] = $value;
         }
 
@@ -148,7 +145,7 @@ class CheckoutPageItem
      * @param string $paymentInfo
      * @return CheckoutPageItem
      */
-    public function setPaymentInfo(string $paymentInfo)
+    public function setPaymentInfo($paymentInfo)
     {
         $this->paymentInfo = $paymentInfo;
 
@@ -167,7 +164,7 @@ class CheckoutPageItem
      * @param string $title
      * @return CheckoutPageItem
      */
-    public function setTitle(string $title)
+    public function setTitle($title)
     {
         $this->title = $title;
 
@@ -186,7 +183,7 @@ class CheckoutPageItem
      * @param string $description
      * @return CheckoutPageItem
      */
-    public function setDescription(string $description)
+    public function setDescription($description)
     {
         $this->description = $description;
 
@@ -205,7 +202,7 @@ class CheckoutPageItem
      * @param int $duration
      * @return CheckoutPageItem
      */
-    public function setDuration(int $duration)
+    public function setDuration($duration)
     {
         $this->duration = $duration;
 
@@ -224,10 +221,10 @@ class CheckoutPageItem
      * @param string $durationUnit
      * @return CheckoutPageItem
      */
-    public function setDurationUnit(string $durationUnit)
+    public function setDurationUnit($durationUnit)
     {
         if (!in_array($durationUnit, [self::DURATION_WEEK, self::DURATION_MONTH])) {
-            throw new \InvalidArgumentException('Duration unit must be "WEEK" or "MONTH"');
+            throw new \DomainException('Duration unit must be "WEEK" or "MONTH"');
         }
 
         $this->durationUnit = $durationUnit;
@@ -247,7 +244,7 @@ class CheckoutPageItem
      * @param string $amount
      * @return CheckoutPageItem
      */
-    public function setAmount(string $amount)
+    public function setAmount($amount)
     {
         $this->amount = $amount;
 
@@ -285,7 +282,7 @@ class CheckoutPageItem
      * @param bool $isAdultContent
      * @return CheckoutPageItem
      */
-    public function setIsAdultContent(bool $isAdultContent)
+    public function setIsAdultContent($isAdultContent)
     {
         $this->isAdultContent = $isAdultContent;
 
@@ -304,7 +301,7 @@ class CheckoutPageItem
      * @param bool $isRoaming
      * @return CheckoutPageItem
      */
-    public function setIsRoaming(bool $isRoaming)
+    public function setIsRoaming($isRoaming)
     {
         $this->isRoaming = $isRoaming;
 
@@ -323,7 +320,7 @@ class CheckoutPageItem
      * @param string $successUrl
      * @return CheckoutPageItem
      */
-    public function setSuccessUrl(string $successUrl)
+    public function setSuccessUrl($successUrl)
     {
         $this->successUrl = $successUrl;
 
@@ -342,7 +339,7 @@ class CheckoutPageItem
      * @param string $cancelUrl
      * @return CheckoutPageItem
      */
-    public function setCancelUrl(string $cancelUrl)
+    public function setCancelUrl($cancelUrl)
     {
         $this->cancelUrl = $cancelUrl;
 
@@ -361,7 +358,7 @@ class CheckoutPageItem
      * @param string $errorUrl
      * @return CheckoutPageItem
      */
-    public function setErrorUrl(string $errorUrl)
+    public function setErrorUrl($errorUrl)
     {
         $this->errorUrl = $errorUrl;
 
@@ -380,7 +377,7 @@ class CheckoutPageItem
      * @param string $cpServiceId
      * @return CheckoutPageItem
      */
-    public function setCpServiceId(string $cpServiceId)
+    public function setCpServiceId($cpServiceId)
     {
         $this->cpServiceId = $cpServiceId;
 
@@ -399,7 +396,7 @@ class CheckoutPageItem
      * @param string $cpUserId
      * @return CheckoutPageItem
      */
-    public function setCpUserId(string $cpUserId)
+    public function setCpUserId($cpUserId)
     {
         $this->cpUserId = $cpUserId;
 
@@ -418,7 +415,7 @@ class CheckoutPageItem
      * @param string $cpSubscriptionId
      * @return CheckoutPageItem
      */
-    public function setCpSubscriptionId(string $cpSubscriptionId)
+    public function setCpSubscriptionId($cpSubscriptionId)
     {
         $this->cpSubscriptionId = $cpSubscriptionId;
 
@@ -437,7 +434,7 @@ class CheckoutPageItem
      * @param string $imageUrl
      * @return CheckoutPageItem
      */
-    public function setImageUrl(string $imageUrl)
+    public function setImageUrl($imageUrl)
     {
         $this->imageUrl = $imageUrl;
 
@@ -456,7 +453,7 @@ class CheckoutPageItem
      * @param string $userLanguage
      * @return CheckoutPageItem
      */
-    public function setUserLanguage(string $userLanguage)
+    public function setUserLanguage($userLanguage)
     {
         $this->userLanguage = $userLanguage;
 
@@ -475,7 +472,7 @@ class CheckoutPageItem
      * @param string $msisdn
      * @return CheckoutPageItem
      */
-    public function setMsisdn(string $msisdn)
+    public function setMsisdn($msisdn)
     {
         $this->msisdn = $msisdn;
 
@@ -494,7 +491,7 @@ class CheckoutPageItem
      * @param string $contentType
      * @return CheckoutPageItem
      */
-    public function setContentType(string $contentType)
+    public function setContentType($contentType)
     {
         $this->contentType = $contentType;
 

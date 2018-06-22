@@ -19,14 +19,24 @@ class CheckoutPageServiceTest extends TestCase
         $environment = new Environment(Environment::ENV_PROD, 'gridonic-123', 's3cr3t');
         $checkoutPageService = CheckoutPageService::create($environment);
 
-        $url = $checkoutPageService->getCheckoutPageUrl(new CheckoutPageItem());
+        $checkoutPageItem = new CheckoutPageItem();
+        $checkoutPageItem
+            ->setPaymentInfo('paymentInfo')
+            ->setTitle('title')
+            ->setDescription('description')
+            ->setAmount('amount')
+            ->setSuccessUrl('successUrl')
+            ->setCancelUrl('cancelUrl')
+            ->setErrorUrl('errorUrl');
+
+        $url = $checkoutPageService->getCheckoutPageUrl($checkoutPageItem);
         $this->assertNotFalse(strpos($url, 'easypay.swisscom.ch'));
         $this->assertFalse(strpos($url, 'easypay-staging.swisscom.ch'));
 
         $environment = new Environment(Environment::ENV_STAGING, 'gridonic-123', 's3cr3t');
         $checkoutPageService = CheckoutPageService::create($environment);
 
-        $url = $checkoutPageService->getCheckoutPageUrl(new CheckoutPageItem());
+        $url = $checkoutPageService->getCheckoutPageUrl($checkoutPageItem);
         $this->assertFalse(strpos($url, 'easypay.swisscom.ch'));
         $this->assertNotFalse(strpos($url, 'easypay-staging.swisscom.ch'));
     }
@@ -60,24 +70,45 @@ class CheckoutPageServiceTest extends TestCase
                 ->willReturn('http');
         });
 
-        $checkoutItem = new CheckoutPageItem();
-        $checkoutItem
-            ->setTitle('Checkout Item')
-            ->setPaymentInfo('Some payment information')
-            ->setAmount('99.90')
-            ->setDescription('A description');
+        // Note: The order of these keys must be equal to the order of the CheckoutPageItem's private members.
+        $data = [
+            'paymentInfo' => 'Some payment information',
+            'title' => 'Checkout Item',
+            'description' => 'A description',
+            'amount' => '99.90',
+            'successUrl' => 'successUrl',
+            'cancelUrl' => 'cancelUrl',
+            'errorUrl' => 'errorUrl',
+        ];
+        $checkoutPageItem = new CheckoutPageItem($data);
 
-        $paymentData = json_encode(array_merge($checkoutItem->toArray(), ['merchantId' => 'merchantId-123']));
-
+        $paymentData = json_encode(array_merge($data, ['merchantId' => 'merchantId-123']));
         $urlParams = http_build_query([
             'checkoutRequestItem' => base64_encode($paymentData),
             'signature' => base64_encode('signatureString'),
         ]);
 
         $expectedUrl = sprintf('http://easypay.swisscom.ch/charging-engine-checkout/authorize.jsf?%s', $urlParams);
-        $this->assertEquals($expectedUrl, $checkoutPageService->getCheckoutPageUrl($checkoutItem));
+        $this->assertEquals($expectedUrl, $checkoutPageService->getCheckoutPageUrl($checkoutPageItem));
     }
 
+    public function testGetCheckoutPageUrl_MissingMandatoryRequestParameter_ThrowsException()
+    {
+        $environment = new Environment(Environment::ENV_PROD, 'gridonic-123', 's3cr3t');
+        $checkoutPageService = CheckoutPageService::create($environment);
+
+        $requiredParameters = CheckoutPageService::$requiredParameters;
+        $data = [];
+        foreach ($requiredParameters as $parameter) {
+            $data[$parameter] = $parameter;
+        }
+
+        // Remove a random required parameter
+        unset($data[$requiredParameters[array_rand($requiredParameters)]]);
+
+        $this->expectException(\DomainException::class);
+        $checkoutPageService->getCheckoutPageUrl(new CheckoutPageItem($data));
+    }
 
     /**
      * @param \closure|null $dependencyManipulator
