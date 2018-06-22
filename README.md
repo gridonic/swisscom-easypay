@@ -46,13 +46,13 @@ use Gridonic\EasyPay\CheckoutPage\CheckoutPageService;
 // Map the user's shopping cart to a CheckoutPageItem
 $checkoutPageItem = new CheckoutPageItem();
 $checkoutPageItem
-    ->setTitle('A title displayed on the checkout page')
-    ->setDescription('A description displayed on the checkout page')
-    ->setPaymentInfo('Some payment information, visible on the invoice of the customer')
+    ->setTitle('A mandatory title displayed on the checkout page')
+    ->setDescription('A mandatory description displayed on the checkout page')
+    ->setPaymentInfo('Mandatory payment information, visible on the invoice of the customer')
     ->setAmount('99.90')
     ->setSuccessUrl('https://myshop.com/return')
     ->setErrorUrl('https://myshop.com/return')
-    ->setCancelUrl('https://myshop.com/cancel')
+    ->setCancelUrl('https://myshop.com/cancel');
 
 // Get the checkout page redirect URL
 $checkoutPageService = CheckoutPageService::create($environment);
@@ -66,7 +66,7 @@ the `CheckoutPageResponseService` to get the `payment-ID` or `subscription-ID` r
 commit the payment:
 
 ```php
-use Gridonic\EasyPay\CheckoutPage\CheckoutPageResponse
+use Gridonic\EasyPay\CheckoutPage\CheckoutPageResponse;
 
 // Create an instance from the available GET parameters
 $checkoutPageResponse = CheckoutPageResponse::createFromGet();
@@ -77,7 +77,7 @@ if ($checkoutPageResponse->isSuccess()) {
     // or if the submitted CheckoutPageItem is a subscription (recurrent service)
     $authSubscriptionId = $checkoutPageResponse->getAuthSubscriptionId();
 } else {
-    print_r($checkoutPageResponse->getErrorCode())
+    print_r($checkoutPageResponse->getErrorCode());
 }
 ```
 
