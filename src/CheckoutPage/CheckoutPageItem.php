@@ -529,6 +529,9 @@ class CheckoutPageItem
         }
 
         foreach ($data as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
             $setter = sprintf('set%s', ucfirst($key));
             if (method_exists($this, $setter)) {
                 $this->$setter($value);

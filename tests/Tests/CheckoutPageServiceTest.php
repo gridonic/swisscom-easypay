@@ -100,11 +100,15 @@ class CheckoutPageServiceTest extends TestCase
         $requiredParameters = CheckoutPageService::$requiredParameters;
         $data = [];
         foreach ($requiredParameters as $parameter) {
+            if ($parameter === 'merchantId') {
+                continue;
+            }
             $data[$parameter] = $parameter;
         }
 
         // Remove a random required parameter
-        unset($data[$requiredParameters[array_rand($requiredParameters)]]);
+        $randomKey = $data[array_rand($data)];
+        unset($data[$randomKey]);
 
         $this->expectException(\DomainException::class);
         $checkoutPageService->getCheckoutPageUrl(new CheckoutPageItem($data));
